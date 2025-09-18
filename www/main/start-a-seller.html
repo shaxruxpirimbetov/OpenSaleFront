@@ -1,0 +1,52 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <h1>Enter data</h1>
+    </header>
+    
+    <br><br>
+    <div class="add-product-form">
+        <h2 class="register-form-title" style="margin-bottom: .5em">Введите емейл для продолжения</h2>
+        
+        <div class="add-product-input-box"><i class="fas fa-envelope"></i><input id="emailInp" type="email" placeholder="Email"></div>
+        <div class="add-product-submit" id="submitButton">Check</div>
+    </div>
+    
+<script src="config.js"></script>
+<script src="js/script.js"></script>
+<script>
+    var accessToken = localStorage.getItem("accessToken")
+    var emailInp = document.getElementById("emailInp")
+    var submitButton = document.getElementById("submitButton")
+    
+    if (accessToken == null) {location.replace("../login.html")}
+    
+    submitButton.addEventListener("click", () => {
+        if (!emailInp.value.endsWith("@gmail.com")) {customErrorAlert("Invalid Error"); return;}
+        
+        fetch(baseUrl+"/stores/store/", {
+            method: "POST",
+            headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`},
+            body: JSON.stringify({email: emailInp.value})
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.code == "user_not_found") {location.replace("../login.html")}
+            if (data.status) {
+                location.replace("become-a-seller.html")
+            }
+        })
+        // location.replace("become-a-seller.html")
+    })
+    
+</script>
+</body>
+</html>

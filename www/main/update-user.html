@@ -1,0 +1,64 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../auth.css">
+</head>
+<body>
+    <header class="register-header">
+        <h1>Обновление</h1>
+    </header>
+    <form class="register-form">
+        <h2 class="register-form-title">Введите новые данные</h2>
+        <div class="input-box">
+            <i class="fas fa-user"></i>
+            <input id="usernameInp" type="text" placeholder="Имя пользователя">
+        </div>
+        <div class="register-sbmt" id="submitButton">Обновить</div>
+    </form>
+
+<script src="config.js"></script>
+<script src="js/script.js"></script>
+<script>
+    var accessToken = localStorage.getItem("accessToken")
+    var usernameInp = document.getElementById("usernameInp")
+    var submitButton = document.getElementById("submitButton")
+    var user = JSON.parse(sessionStorage.getItem("user"))
+    
+    if (user != null) {usernameInp.value = user.username}
+    
+    submitButton.addEventListener("click", () => {
+        if (usernameInp.value.length < 6) {customErrorAlert("Usernam so verify"); return;}
+        
+        var sure = confirm("Are you sure?")
+        
+        if (!sure) {return;}
+        
+        fetch(baseUrl+"/user/register/", {
+            method: "PUT",
+            headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`},
+            body: JSON.stringify({username: usernameInp.value})
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.code == "user_not_found") {location.replace("../login.html")}
+            if (data.status == false) {customErrorAlert(data.message)}
+            else {
+                fetch(baseUrl+"/user/get_me/", {
+                    method: "GET",
+                    headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`},
+                })
+                .then(res => res.json())
+                .then(data => {
+                    sessionStorage.setItem("user", JSON.stringify(data))
+                    history.back()
+                })
+            }
+        })
+    })
+</script>
+</body>
+</html>

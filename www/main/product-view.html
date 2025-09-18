@@ -1,0 +1,110 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <h2>OpenSale</h2>
+    </header>
+    <main>
+        
+        <div class="view-product-data">
+            <h2 class="view-product-title">Some Product</h2>
+            <h3 class="view-product-price">$35.00</h3>
+        </div>
+
+        
+        <div class="view-product-images">
+            <!--
+            <img src="image.jpg" alt="">
+            <img src="image.jpg" alt="">
+            <img src="img.jpg" alt="">
+            <img src="image.jpg" alt="">
+            <img src="image.jpg" alt="">
+            -->
+        </div>
+            
+        <pre class="view-product-description">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, perferendis accusantium? Reprehenderit nemo, distinctio excepturi facilis sequi autem id dignissimos, similique mollitia veritatis laborum numquam aperiam quam ullam inventore eveniet.
+        </pre>
+        
+        <div class="view-product-manage-btns-list">
+            <div class="view-product-manage-btn" id="selectCart">Add to Cart</div>
+            <div class="view-product-manage-btn">Con eMail</div>
+        </div>
+
+    </main>
+    <footer>
+        <div class="footer-page" onclick="history.back(); location.replace('index.html')">
+            <i class="fas fa-home"></i>
+            <div class="footer-page-title">Home</div>
+        </div>
+        <div class="footer-page" onclick="location.replace('cart.html')">
+            <i class="fas fa-shopping-cart"></i>
+            <div class="footer-page-title">Cart</div>
+        </div>
+        <div class="footer-page" onclick="location.replace('profile.html')">
+            <i class="fas fa-user"></i>
+            <div class="footer-page-title">Profile</div>
+        </div>
+    </footer>
+    <br><br><br><br><br>
+
+<script src="config.js"></script>
+<script src="js/script.js"></script>
+<script>
+    var accessToken = localStorage.getItem("accessToken")
+    var openProductId = sessionStorage.getItem("open_product_id")
+    var viewProductData = document.querySelector(".view-product-data")
+    var viewProductTitle = document.querySelector(".view-product-title")
+    var viewProductPrice = document.querySelector(".view-product-price")
+    var viewProductImages = document.querySelector(".view-product-images")
+    var viewProductDescription = document.querySelector(".view-product-description")
+    var selectCart = document.getElementById("selectCart")
+    
+    var products = JSON.parse(sessionStorage.getItem("products"))
+    var product = null
+    
+    if (accessToken == null) {location.replace("../login.html")}
+    if (openProductId == null || products == null) {location.replace("index.html")}
+    
+    for (let i of products) {
+        if (i.id == openProductId) {product = i}
+    }
+    
+    if (product == null) {customErrorAlert("Product Not found")}
+    
+    product.images.forEach((image) => {
+        var imageBox = document.createElement("img")
+        imageBox.src = baseUrl+image.image
+        viewProductImages.appendChild(imageBox)
+    })
+    viewProductTitle.textContent = product.title
+    viewProductPrice.textContent = product.price
+    viewProductDescription.textContent = product.description
+    if (product.saved) {selectCart.textContent = "Remove form cart"}
+    else {selectCart.textContent = "Add to cart"}
+    
+    var cartFunction = (product_id) => {
+        fetch(baseUrl+"/user/saved_products/", {
+            method: "POST",
+            headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`},
+            body: JSON.stringify({product_id: product_id})
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.code == "user_not_found") {location.replace("../login.html")}
+            if (data.status == true) {selectCart.textContent = "Add to cart"}
+            else {selectCart.textContent = "Remove form cart"}
+            sessionStorage.removeItem("saved_products")
+        })
+    }
+    selectCart.onclick = () => {cartFunction(product.id)}
+</script>
+</body>
+</html>

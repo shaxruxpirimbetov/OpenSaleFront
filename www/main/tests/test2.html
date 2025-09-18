@@ -1,0 +1,29 @@
+<input type="text" id="title" placeholder="Заголовок">
+<input type="file" id="images" multiple>
+<button id="sendBtn">Отправить</button>
+
+<script>
+    document.getElementById("sendBtn").addEventListener("click", () => {
+        const title = document.getElementById("title").value;
+        const files = document.getElementById("images").files;
+        
+        const formData = new FormData();
+        formData.append("title", title);
+        
+        // если несколько файлов
+        for (let i = 0; i < files.length; i++) {
+            formData.append("images[]", files[i]);
+            // backend может ожидать просто "images" без [] – зависит от реализации
+        }
+        
+        fetch("http://localhost:8000/upload", {
+                method: "POST",
+                body: formData,
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Ответ от сервера:", data);
+            })
+            .catch(err => console.error("Ошибка:", err));
+    });
+</script>

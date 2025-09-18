@@ -1,0 +1,72 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    
+    <header class="register-header">
+        <h1>Мой продукты</h1>
+    </header>
+    
+    <main>
+        <div class="my-products-list">
+            <!--
+            <div class="my-product" onclick="location.assign('update-product.html')">
+                <img src="image.jpg" alt="" class="my-product-image">
+                <div class="my-product-title">Bmw product</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            -->
+        </div>
+    </main>
+
+<script src="config.js"></script>
+<script src="js/script.js"></script>
+<script>
+    var accessToken = localStorage.getItem("accessToken")
+    var productsList = document.querySelector(".my-products-list")
+    
+    if (accessToken == null) {location.replace("../login.html")}
+    
+    fetch(baseUrl+"/products?my", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}
+    })
+    .then(res => res.json())
+    .then(data => {
+        sessionStorage.setItem("products", JSON.stringify(data))
+        data.forEach((product) => {
+            if (data.code == "user_not_found") {location.replace("../login.html")}
+            var productBox = document.createElement("div")
+            var productImage = document.createElement("img")
+            var productTitle = document.createElement("div")
+            var productIcon = document.createElement("i")
+            
+            productBox.className = "my-product"
+            productImage.className = "my-product-image"
+            productTitle.className = "my-product-title"
+            productIcon.className = "fas fa-chevron-right"
+            
+            productImage.src = baseUrl+product.images[0].image
+            productTitle.textContent = product.title
+            productBox.onclick = () => {
+                sessionStorage.setItem("update_product_id", product.id)
+                location.assign("update-product.html")
+            }
+            
+            productBox.appendChild(productImage)
+            productBox.appendChild(productTitle)
+            productBox.appendChild(productIcon)
+            productsList.appendChild(productBox)
+            
+        })
+    })
+    
+</script>
+</body>
+</html>

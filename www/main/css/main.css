@@ -1,0 +1,393 @@
+@import url('https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@200..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');
+
+:root {
+    --first-color: #172339;
+    --second-color: #F3F4F6;
+    --bg-color: #ffffff;
+}
+
+* {
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans", sans-serif;
+}
+
+header {
+    background: var(--first-color);
+    color: white;
+    padding: 1em;
+}
+
+.register-header {
+    background: var(--first-color);
+    color: white;
+    padding: 2em;
+    border-radius: 0 0 15em 0;
+}
+
+main {
+    padding: .5em;
+    display: flex;
+    flex-direction: column;
+}
+
+.products-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: .5em;
+}
+
+.products-list .product-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.products-list .product {
+    box-shadow: 0 0 .5em grey;
+    overflow: hidden;
+    border-radius: .5em;
+}
+
+.products-list .product .product-data {padding: .5em;}
+.products-list .product .product-title {
+    font-weight: 650;
+    overflow: hidden;
+    height: 25px;
+}
+
+.view-product-images {
+    display: flex;
+    overflow: auto;
+    border-radius: 1em;
+    gap: .5em;
+}
+
+.view-product-images img {
+    height: 400px;
+    border-radius: 1em;
+    object-fit: cover;
+}
+
+.view-product-data,
+.view-product-description {
+    background: var(--second-color);
+    padding: .5em;
+    border-radius: 1em;
+    margin-block: .5em;
+}
+
+.view-product-manage-btns-list {
+    background: var(--second-color);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: .5em;
+    border-radius: 1em;
+}
+
+.view-product-manage-btns-list .view-product-manage-btn {
+    background: var(--first-color);
+    padding: .5em;
+    color: white;
+    border-radius: 1em;
+    text-align: center;
+    transition: all .5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-product-title {
+    height: 30px;
+    overflow: hidden;
+}
+
+
+.profile-user-data {
+    background: var(--second-color);
+    padding: .5em;
+    border-radius: 1em;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.profile-user-data .user-photo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-user-data .user-username {
+    font-weight: 650;
+}
+
+.mark-div {
+    display: flex;
+    gap: .25em;
+}
+
+.mark-div .mark {
+    background: red;
+    padding: .25em;
+    border-radius: .25em;
+}
+
+.mark-div .mark-text {
+    font-size: 1.45em;
+    font-weight: 700;
+}
+
+.buttons-list {
+    margin: .5em 0 1.5em 0;
+    box-shadow: 0 0 .5em gray;
+    border-radius: .5em;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    gap: .5em;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.button:active {background: #f0f0f0; border-radius: .5em}
+
+.button .button-title {width: 100%}
+.button i.fa-chevron-right {color: grey;}
+
+.button:last-child {
+    border: none;
+}
+
+.button i {font-size: 1.2em}
+
+.my-status-container {
+    background: var(--second-color);
+    padding: 1em;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: .25em;
+    margin: 1em 0;
+}
+
+.status-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-btn {
+    background: grey;
+}
+
+.my-products-list {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 .5em grey;
+    border-radius: .5em;
+}
+
+.my-product {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #f0f0f0;
+    padding: .5em;
+    align-items: center;
+    gap: .5em;
+}
+
+.my-product:last-child {border: none}
+
+.my-product-image {
+    width: 50px; height: 50px;
+    border-radius: .25em;
+    object-fit: cover;
+}
+
+.my-product .my-product-title {
+    width: 100%;
+    font-weight: 650;
+}
+
+.my-product i.fa-chevron-right {
+    color: grey;
+    font-size: 1.25em;
+}
+
+.update-product-images {
+    display: flex;
+    overflow: auto;
+    gap: .5em;
+}
+
+.update-product-images img {
+    height: 400px;
+    border-radius: 1em;
+    object-fit: cover;
+}
+
+.update-product-box {
+    margin: .5em 0;
+    background: var(--second-color);
+    padding: .5em;
+    border-radius: 1em;
+}
+
+.update-product-box .key {
+    font-size: 1.25em;
+    font-weight: 650;
+}
+
+.update-product-box .value {
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.update-product-button {
+    background: var(--first-color);
+    padding: 1em;
+    border-radius: 1em;
+    color: white;
+    text-align: center;
+    font-weight: 650;
+    display: none;
+}
+
+.centered-text-box {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%)
+}
+
+.centered-text-box pre {
+    color: var(--first-color);
+    font-weight: 500;
+    opacity: .7;
+}
+
+.update-product-box input {
+    background: none;
+    border: none;
+}
+
+.custom-alert-box {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    z-index: 99;
+    background: white;
+    box-shadow: 0 0 .5em grey;
+    padding: 1em;
+    border-radius: 2em 2em 0 0;
+    gap: 1em;
+}
+
+.custom-alert-message {
+    font-size: 1.25em;
+    font-weight: 500;
+}
+
+.custom-alert-button {
+    background: var(--first-color);
+    padding: .5em;
+    text-align: center;
+    font-weight: 650;
+    color: white;
+    border-radius: 1em;
+}
+
+.custom-error-alert-box {
+    background: #E72E57;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    margin: 2.5%;
+    display: flex;
+    z-index: 99;
+    padding: .5em 1em;
+    border-radius: .5em;
+    gap: 1em;
+    color: white;
+    font-size: 1.25em;
+    font-weight: 650;
+    align-items: center;
+}
+
+.custom-error-alert-box i {
+    font-size: 1.25em;
+}
+
+/*
+.custom-error-message {
+    color: white;
+    fonth
+}
+*/
+
+.add-product-form {
+    display: flex;
+    flex-direction: column;
+    gap: .25em;
+}
+
+.add-product-input-box {
+    background: var(--second-color);
+    padding: 1em .5em;
+    display: flex;
+    gap: .5em;
+}
+
+.add-product-input-box i {font-size: 1.25em;}
+.add-product-input-box input,
+.add-product-input-box textarea {
+    background: none;
+    border: none;
+    width: 100%;
+}
+
+.add-product-input-box textarea {
+    width: 100%;
+    height: 25px;
+}
+
+.add-product-submit {
+    padding: 1em;
+    background: var(--first-color);
+    color: white;
+    text-align: center;
+    font-weight: 650;
+}
+
+footer {
+    background: var(--first-color);
+    position: fixed;
+    bottom: 0;
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    margin: 5%;
+    padding: .5em;
+    color: white;
+    border-radius: 1.5em;
+    box-shadow: 0 0 .5em var(--first-color);
+}
+
+footer .footer-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+footer .footer-page i {font-size: 1.25em}
+

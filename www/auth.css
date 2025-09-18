@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@200..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');
+
+:root {
+    --first-color: #172339;
+    --second-color: #F3F4F6;
+    --bg-color: #ffffff;
+}
+
+* {
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans", sans-serif;
+}
+
+header {
+    background: var(--first-color);
+    padding: .5em;
+    color: white;
+}
+
+.register-header {
+    background: var(--first-color);
+    color: white;
+    padding: 2em;
+    border-radius: 0 0 15em 0;
+}
+
+.register-form {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    backdrop-filter: blur(1em);
+    padding: 1em;
+    border-radius: .5em;
+}
+
+.input-box {
+    background: var(--second-color);
+    padding: .5em 1em;
+    border-radius: 2em;
+    display: flex;
+    align-items: center;
+    /*box-shadow: 0 .5em 0 gainsboro;*/
+}
+
+.input-box i {
+    font-size: 1.25em;
+    color: var(--first-color);
+}
+
+.input-box input {
+    padding: .25em;
+    background: none;
+    border: none;
+    font-size: 1.2em;
+}
+
+.register-ask {
+    color: var(--first-color);
+    font-weight: 1000;
+    text-align: end;
+}
+
+.register-sbmt {
+    background: var(--first-color);
+    padding: 1em;
+    border-radius: 2em;
+    color: white;
+    font-weight: 1000;
+    text-align: center;
+    /*box-shadow: 0 .5em 0 black;*/
+}
+
+.custom-error-alert-box {
+    background: red;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    margin: 2.5%;
+    display: flex;
+    flex-direction: column;
+    z-index: 99;
+    padding: .5em;
+    border-radius: .5em;
+    gap: 1em;
+    color: white;
+    font-size: 1.25em;
+    font-weight: 650;
+}

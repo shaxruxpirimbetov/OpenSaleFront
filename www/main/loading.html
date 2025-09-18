@@ -1,0 +1,65 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {margin: 0; padding: 0; outline: 0;}
+        body {
+            background: #42445A;
+        }
+        .phone {
+            background: grey;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            height: 80%;
+            width: 80%;
+            border: 10px solid black;
+            border-radius: 1.5em;
+            overflow: hidden;
+        }
+        .screen {
+            background: url("image.jpg") no-repeat center;
+            background-repeat: cover;
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+        .time {
+            position: absolute;
+            top: 10%; left: 50%;
+            transform: translate(-50%, -10%);
+            font-weight: 900;
+            font-size: 6em;
+            border-radius: .25em;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone">
+        <div class="screen">
+            <div class="time">09:11</div>
+        </div>
+    </div>
+
+<script>
+    var timeBox = document.querySelector(".time")
+    var hour = 00
+    var minute = 0
+    
+    timeBox.onpointerup = () => {alert("Pointer Up")}
+    
+    setInterval(() => {
+        if (minute == 59) {hour++; minute = 0} else {minute++}
+        var hourStr = hour
+        var minuteStr = minute
+        if (minute < 10) {minuteStr = `0${minute}`}
+        if (hour < 10) {hourStr = `0${hour}`}
+        timeBox.textContent = `${hourStr}:${minuteStr}`
+        
+    }, 100)
+</script>
+</body>
+</html>

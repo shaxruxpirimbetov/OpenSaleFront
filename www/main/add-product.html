@@ -1,0 +1,94 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    
+    <header class="register-header">
+        <h2>Добавить продукт</h2>
+    </header>
+    
+<!-- add main and del br and add border radius in css with .5em and do padding .5em (del 1em) -->
+    
+        <br><br>
+        <div class="add-product-form">
+            <h2 class="register-form-title" style="margin-bottom: .5em; font-weight: 950;">Введите данные</h2>
+            <div class="add-product-input-box"><i class="fas fa-images"></i><input class="some" type="file"  multiple></div>
+            <div class="add-product-input-box"><i class="fas fa-i"></i><input id="titleInp" type="text" placeholder="Title"></div>
+            <div class="add-product-input-box"><i class="fas fa-d"></i><textarea id="descriptionInp" cols="0" rows="0" placeholder="Description"></textarea></div>
+            <div class="add-product-input-box"><i class="fas fa-dollar"></i><input id="priceInp" type="number" placeholder="Price"></div>
+            <div class="add-product-submit" id="submitButton">Add Product</div>
+        </div>
+
+<script src="config.js"></script>
+<script src="js/script.js"></script>
+<script>
+    var images = document.querySelector(".some")
+    var titleInp = document.getElementById("titleInp")
+    var descriptionInp = document.getElementById("descriptionInp")
+    var priceInp = document.getElementById("priceInp")
+    var submitButton = document.getElementById("submitButton")
+    var accessToken = localStorage.getItem("accessToken")
+    
+    if (accessToken == null) {location.replace("../login.html")}
+    
+    images.addEventListener("change", () => {
+        if (images.files.length > 4) {
+            customErrorAlert("Очень много фотографий. Должен быть меньше 4")
+            images.value = ""
+            return;
+        }
+        for (let i of images.files) {
+            if (i.name.endsWith(".png")) {}
+            else if (i.name.endsWith(".jpg")) {}
+            else {customErrorAlert(`Инвалидный файл: ${i.name}`); images.value = ""; return;}
+        }
+    })
+    
+    submitButton.addEventListener("click", () => {
+        if (titleInp.value.length < 6) {customErrorAlert("Title so verify"); return;}
+        if (descriptionInp.value.length < 30) {customErrorAlert("Description so verify"); return;}
+        if (priceInp.value.length < 0) {customErrorAlert("Price so verify"); return;}
+        
+        if (titleInp.value.length > 24) {customErrorAlert("Title so Long"); return;}
+        if (descriptionInp.value.length > 6000) {customErrorAlert("Description so Long"); return;}
+        
+        var formData = new FormData();
+        
+        formData.append("title", titleInp.value)
+        formData.append("description", descriptionInp.value)
+        formData.append("price", priceInp.value)
+        for (let image of images.files) {
+            formData.append("images", image)
+        }
+        
+        fetch(baseUrl+"/stores/store?my", {
+            method: "GET",
+            headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}
+        })
+        .then(res => res.json())
+        .then(data => {
+            formData.append("store_id", data[0].id)
+            fetch(baseUrl+"/products/", {
+                method: "POST",
+                headers: {"authorization": `Bearer ${accessToken}`},
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status == false) {customErrorAlert(data.message)}
+                history.back()
+            })
+        })
+    })
+    
+    
+    
+</script>
+</body>
+</html>

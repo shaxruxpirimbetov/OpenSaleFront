@@ -1,0 +1,54 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <header class="register-header">
+        <h1>Авторизация</h1>
+    </header>
+    <form class="register-form">
+        <h2 class="register-form-title">Введите данные</h2>
+        <div class="input-box">
+            <i class="fas fa-user"></i>
+            <input id="usernameInp" type="text" placeholder="Имя пользователя">
+        </div>
+        <div class="input-box">
+            <i class="fas fa-lock"></i>
+            <input id="passwordInp" type="password" placeholder="Пароль">
+        </div>
+        <div class="register-ask" onclick="location.replace('register.html')"><p>У Вас нет аккаунта?</p></div>
+        <div class="register-sbmt" id="sbmtBtn">Авторизоваться</div>
+    </form>
+
+<script src="config.js"></script>
+<script src="main/js/script.js"></script>
+<script>
+    var usernameInp = document.getElementById("usernameInp")
+    var passwordInp = document.getElementById("passwordInp")
+    var submitButton = document.getElementById("sbmtBtn")
+    
+    submitButton.addEventListener("click", () => {
+        if (usernameInp.value.length < 3) {customErrorAlert("Username so verify"); return;}
+        if (passwordInp.value.length < 8) {customErrorAlert("Password so verify"); return;}
+        
+        fetch(baseUrl+"/api/token/", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({username: usernameInp.value, password: passwordInp.value})
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.access) {
+                localStorage.setItem("accessToken", data.access)
+                location.replace("main/index.html")
+            } else {customErrorAlert(data.detail)}
+        })
+    })
+</script>
+</body>
+</html>

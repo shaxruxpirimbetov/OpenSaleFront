@@ -1,0 +1,26 @@
+<form id="myForm">
+    <input type="text" name="username" placeholder="Введите имя" />
+    <input type="email" name="email" placeholder="Введите email" />
+    <input type="file" name="avatar" />
+    <button type="submit">Отправить</button>
+</form>
+
+<script>
+    const form = document.getElementById("myForm");
+    
+    form.addEventListener("submit", function(e) {
+        e.preventDefault(); // не даем перезагрузить страницу
+        
+        const formData = new FormData(form);
+        
+        fetch("http://localhost:8000/upload", {
+                method: "POST",
+                body: formData, // здесь FormData сам правильно создаст тело запроса
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("Ответ от сервера:", data);
+            })
+            .catch((err) => console.error("Ошибка:", err));
+    });
+</script>

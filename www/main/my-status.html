@@ -1,0 +1,105 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    
+    <header class="register-header">
+        <h1>Мой статус</h1>
+    </header>
+    
+    <main>
+        <div class="my-status-container other">
+            <div class="status-box">
+                <h3 class="title">Пользователь:</h3>
+                <h4 class="value" id="myUsername">sime</h4>
+            </div>
+            <div class="status-box">
+                <h3 class="title">Статус:</h3>
+                <h4 class="value" id="myStatus">Seller/Buyer</h4>
+            </div>
+        </div>
+        
+        <div class="buttons-list" id="sellerContainer">
+            <div class="button" onclick="location.assign('my-products.html')">
+                <i class="fas fa-store"></i>
+                <div class="button-title">Мой товары</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="button" onclick="location.assign('add-product.html')">
+                <i class="fas fa-plus"></i>
+                <div class="button-title">Добавить товар</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="button">
+                <i class="fas fa-chart-line"></i>
+                <div class="button-title">Анализ</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+        
+        <div class="buttons-list" id="buyerContainer">
+            <div class="button" onclick="location.assign('my-purchase.html')">
+                <i class="fas fa-chart-line"></i>
+                <div class="button-title">Мой покупки</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="button" onclick="location.assign('start-a-seller.html')">
+                <i class="fas fa-store"></i>
+                <div class="button-title">Стать продавцом</div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+    </main>
+
+<script src="config.js"></script>
+<script src="js/script.js"></script>
+<script>
+    var myUsername = document.getElementById("myUsername")
+    var myStatus = document.getElementById("myStatus")
+    var user = JSON.parse(sessionStorage.getItem("user"))
+    var accessToken = localStorage.getItem("accessToken") || null
+    var sellerContainer = document.getElementById("sellerContainer")
+    var buyerContainer = document.getElementById("buyerContainer")
+    
+    if (accessToken == null) {location.replace("../login.html")}
+    
+    if (user == null) {
+        fetch(baseUrl+"/user/get_me/", {
+            method: "GET",
+            headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.code == "user_not_found") {location.replace("../login.html")}
+            sessionStorage.setItem("user", JSON.stringify(data))
+            myUsername.textContent = data.username
+            myStatus.textContent = data.role
+            if (data.role == "Seller") {
+                sellerContainer.style.display = "block"
+                buyerContainer.style.display = "none"
+            } else {
+                sellerContainer.style.display = "none"
+                buyerContainer.style.display = "block"
+            }
+        })
+    } else {
+        myUsername.textContent = user.username;
+        myStatus.textContent = user.role;
+        if (user.role == "Seller") {
+            sellerContainer.style.display = "block"
+            buyerContainer.style.display = "none"
+        } else {
+            sellerContainer.style.display = "none"
+            buyerContainer.style.display = "block"
+        }
+    }
+    
+</script>
+</body>
+</html>

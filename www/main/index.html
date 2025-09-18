@@ -1,0 +1,128 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <h2>OpenSale</h2>
+    </header>
+    <main>
+        <div class="products-list"><!--
+            <div class="product">
+                <img src="image.jpg" alt="" class="product-image" onclick="location.assign('product-view.html')">
+                <div class="product-data">
+                    <div class="product-title">SomeProduct</div>
+                    <div class="product-price">35.00</div>
+                </div>
+            </div>
+            -->
+        </div>
+    </main>
+    <footer>
+        <div class="footer-page" onclick="location.replace('index.html')">
+            <i class="fas fa-home"></i>
+            <div class="footer-page-title">Home</div>
+        </div>
+        <div class="footer-page" onclick="location.replace('cart.html')">
+            <i class="fas fa-shopping-cart"></i>
+            <div class="footer-page-title">Cart</div>
+        </div>
+        <div class="footer-page" onclick="location.replace('profile.html')">
+            <i class="fas fa-user"></i>
+            <div class="footer-page-title">Profile</div>
+        </div>
+    </footer>
+    <br><br><br><br><br>
+
+<script src="config.js"></script>
+<script src="js/script.js"></script>
+<script>
+
+    if (!navigator.onLine) {customAlert("Connection Error")}
+    var accessToken = localStorage.getItem("accessToken") || null
+    var sessionProducts = JSON.parse(sessionStorage.getItem("products")) || null
+    var productsList = document.querySelector(".products-list")
+    
+    if (accessToken == null) {location.replace("../login.html")}
+    
+    if (sessionProducts == null || sessionProducts.length == 0 || sessionProducts.detail) {
+        fetch(baseUrl+"/products/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${accessToken}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.code == "user_not_found") {location.replace("../login.html")}
+            console.log(data)
+            if (data.length == 0) {addCenteredText("Products not found")}
+            sessionStorage.setItem("products", JSON.stringify(data))
+            data.forEach((product) => {
+                var productBox = document.createElement("div")
+                var productImage = document.createElement("img")
+                var productData = document.createElement("div")
+                var productTitle = document.createElement("div")
+                var productPrice = document.createElement("div")
+                
+                productBox.className = "product"
+                productImage.className = "product-image"
+                productData.className = "product-data"
+                productTitle.className = "product-title"
+                productPrice.className = "product-price"
+                
+                productImage.src = baseUrl+product.images[0].image
+                productTitle.textContent = product.title
+                productPrice.textContent = product.price
+                productBox.onclick = () => {openProductView(product.id)}
+                
+                productData.appendChild(productTitle)
+                productData.appendChild(productPrice)
+                productBox.appendChild(productImage)
+                productBox.appendChild(productData)
+                
+                productsList.appendChild(productBox)
+            })
+        })
+    } else {
+        sessionProducts.forEach((product) => {
+            var productBox = document.createElement("div")
+            var productImage = document.createElement("img")
+            var productData = document.createElement("div")
+            var productTitle = document.createElement("div")
+            var productPrice = document.createElement("div")
+                
+            productBox.className = "product"
+            productImage.className = "product-image"
+            productData.className = "product-data"
+            productTitle.className = "product-title"
+            productPrice.className = "product-price"
+            
+            productImage.src = baseUrl+product.images[0].image
+            productTitle.textContent = product.title
+            productPrice.textContent = product.price
+            productBox.onclick = () => {openProductView(product.id)}
+            
+            productData.appendChild(productTitle)
+            productData.appendChild(productPrice)
+            productBox.appendChild(productImage)
+            productBox.appendChild(productData)
+                
+            productsList.appendChild(productBox)
+        })
+    }
+    
+    var openProductView = (product_id) => {
+        sessionStorage.setItem("open_product_id", product_id)
+        location.replace("product-view.html")
+    }
+    
+</script>
+</body>
+</html>

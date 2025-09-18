@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <h2>Become</h2>
+    </header>
+    
+    <br><br>
+    <div class="add-product-form">
+        <h2 class="add-product-title" style="margin-bottom: .25em">Some</h2>
+        <div class="add-product-input-box">
+            <i class="fas fa-image"></i>
+            <input id="logoInp" type="file" accept="images/*">
+        </div>
+        <div class="add-product-input-box">
+            <i class="fas fa-t"></i>
+            <input id="titleInp" type="text" placeholder="Title">
+        </div>
+        <div class="add-product-input-box">
+            <i class="fas fa-d"></i>
+            <textarea id="descriptionInp" placeholder="Description"></textarea>
+        </div>
+        <div class="add-product-input-box">
+            <i class="fas fa-envelope"></i>
+            <input id="codeInp" type="number" placeholder="Кол полученный в почте...">
+        </div>
+        <div class="add-product-submit" id="submitButton">Become</div>
+    </div>
+
+<script src="config.js"></script>
+<script src="js/script.js"></script>
+<script>
+    
+    var accessToken = localStorage.getItem("accessToken")
+    var logoInp = document.getElementById("logoInp")
+    var titleInp = document.getElementById("titleInp")
+    var descriptionInp = document.getElementById("descriptionInp")
+    var codeInp = document.getElementById("codeInp")
+    var submitButton = document.getElementById("submitButton")
+    
+    if (accessToken == null) {location.replace("../login.html")}
+    
+    submitButton.addEventListener("click", (e) => {
+        if (logoInp.value.length < 1) {customErrorAlert("Set the logo!"); return;}
+        if (titleInp.value.length < 1) {customErrorAlert("Title so verify"); return;}
+        if (descriptionInp.value.length < 1) {customErrorAlert("Description so verify"); return;}
+        if (codeInp.value.length < 1) {customErrorAlert("Invalid code"); return;}
+        
+        var formData = new FormData();
+        formData.append("logo", logoInp.files[0])
+        formData.append("title", titleInp.value)
+        formData.append("description", descriptionInp.value)
+        formData.append("code", codeInp.value)
+        
+        fetch(baseUrl+"/stores/store/", {
+            method: "POST",
+            headers: {"authorization": `Bearer ${accessToken}`},
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status != false) {history.back()}
+        })
+    })
+</script>
+</body>
+</html>

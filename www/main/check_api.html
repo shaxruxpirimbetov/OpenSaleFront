@@ -1,0 +1,14 @@
+<script src="config.js"></script>
+<script>
+var accessToken = localStorage.getItem("accessToken")
+
+fetch(baseUrl+"/products?my", {
+    method: "GET",
+    headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}
+})
+.then(res => res.json())
+.then(data => {
+    console.log(data)
+})
+
+</script>
