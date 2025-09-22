@@ -57,7 +57,9 @@ main {
 .products-list .product .product-title {
     font-weight: 650;
     overflow: hidden;
-    height: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .view-product-images {
