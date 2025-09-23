@@ -12,32 +12,16 @@
         <h2>OpenSale</h2>
     </header>
     <main>
-        
         <div class="view-product-data">
-            <h2 class="view-product-title">Some Product</h2>
-            <h3 class="view-product-price">$35.00</h3>
+            <h2 class="view-product-title"></h2>
+            <h3 class="view-product-price"></h3>
         </div>
-
-        
-        <div class="view-product-images">
-            <!--
-            <img src="image.jpg" alt="">
-            <img src="image.jpg" alt="">
-            <img src="img.jpg" alt="">
-            <img src="image.jpg" alt="">
-            <img src="image.jpg" alt="">
-            -->
-        </div>
-            
-        <pre class="view-product-description">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, perferendis accusantium? Reprehenderit nemo, distinctio excepturi facilis sequi autem id dignissimos, similique mollitia veritatis laborum numquam aperiam quam ullam inventore eveniet.
-        </pre>
-        
+        <div class="view-product-images"></div>
+        <div class="view-product-description"></div>
         <div class="view-product-manage-btns-list">
-            <div class="view-product-manage-btn" id="selectCart">Add to Cart</div>
-            <div class="view-product-manage-btn">Con eMail</div>
+            <div class="view-product-manage-btn" id="selectCart"></div>
+            <div class="view-product-manage-btn"></div>
         </div>
-
     </main>
     <footer>
         <div class="footer-page" onclick="history.back(); location.replace('index.html')">
@@ -55,42 +39,44 @@
     </footer>
     <br><br><br><br><br>
 
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script src="js/script.js"></script>
 <script>
-    var accessToken = localStorage.getItem("accessToken")
-    var openProductId = sessionStorage.getItem("open_product_id")
-    var viewProductData = document.querySelector(".view-product-data")
-    var viewProductTitle = document.querySelector(".view-product-title")
-    var viewProductPrice = document.querySelector(".view-product-price")
-    var viewProductImages = document.querySelector(".view-product-images")
-    var viewProductDescription = document.querySelector(".view-product-description")
+    var productTitle = document.querySelector(".view-product-title")
+    var productPrice = document.querySelector(".view-product-price")
+    var productImages = document.querySelector(".view-product-images")
+    var productDescription = document.querySelector(".view-product-description")
     var selectCart = document.getElementById("selectCart")
+    var accessToken = localStorage.getItem("accessToken")
+    var product_id = sessionStorage.getItem("open_product_id")
+    var fHeaders = null
     
-    var products = JSON.parse(sessionStorage.getItem("products"))
-    var product = null
+    if (accessToken) {fHeaders = {method: "GET", headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}}}
+    else {fHeaders = {method: "GET"}}
     
-    if (accessToken == null) {location.replace("../login.html")}
-    if (openProductId == null || products == null) {location.replace("index.html")}
+    if (product_id == null) {history.back(); location.replace("index.html")}
     
-    for (let i of products) {
-        if (i.id == openProductId) {product = i}
-    }
-    
-    if (product == null) {customErrorAlert("Product Not found")}
-    
-    product.images.forEach((image) => {
-        var imageBox = document.createElement("img")
-        imageBox.src = baseUrl+image.image
-        viewProductImages.appendChild(imageBox)
+    fetch(baseUrl+"/products?product_id="+product_id, fHeaders)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        productTitle.textContent = data.title
+        productPrice.textContent = data.price
+        data.images.forEach((image) => {
+            var imageBox = document.createElement("img")
+            imageBox.src = baseUrl+image.image
+            productImages.appendChild(imageBox)
+        })
+        productDescription.textContent = data.description
+        if (accessToken) {
+            if (data.saved) {selectCart.textContent = "Remove from cart"}
+            else {selectCart.textContent = "Add to Cart"}
+            selectCart.onclick = () => cartFunc(data.id)
+        }
     })
-    viewProductTitle.textContent = product.title
-    viewProductPrice.textContent = product.price
-    viewProductDescription.textContent = product.description
-    if (product.saved) {selectCart.textContent = "Remove form cart"}
-    else {selectCart.textContent = "Add to cart"}
+    .catch(err => customErrorAlert(err))
     
-    var cartFunction = (product_id) => {
+    var cartFunc = (product_id) => {
         fetch(baseUrl+"/user/saved_products/", {
             method: "POST",
             headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`},
@@ -98,13 +84,12 @@
         })
         .then(res => res.json())
         .then(data => {
-            if (data.code == "user_not_found") {location.replace("../login.html")}
-            if (data.status == true) {selectCart.textContent = "Add to cart"}
-            else {selectCart.textContent = "Remove form cart"}
-            sessionStorage.removeItem("saved_products")
+            if (data.detail) {customErrorAlert(data.detail)}
+            console.log(data)
+            if (data.status == true) {selectCart.textContent = "Add to Cart"}
+            else {selectCart.textContent = "Remove from cart"}
         })
     }
-    selectCart.onclick = () => {cartFunction(product.id)}
 </script>
 </body>
 </html>

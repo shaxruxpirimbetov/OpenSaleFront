@@ -12,7 +12,7 @@
         <h2>OpenSale</h2>
     </header>
     <main>
-        
+        <div class="profile-page-datas">
         <div class="profile-user-data">
             <img src="img/profile.jpg" alt="" class="user-photo">
             <div>
@@ -45,6 +45,16 @@
                 <div class="button-title" id="logoutButton">Выйти</div>
             </div>
         </div>
+        </div>
+        
+        <div class="ask-to-register" style="display: none;">
+            <i class="fas fa-smile"></i>
+            <div class="message">Register now to add products</div>
+            <div class="register-button">
+                <i class="fas fa-right-from-bracket"></i>
+                <h3>Register</h3>
+            </div>
+        </div>
         
     </main>
     <footer>
@@ -63,7 +73,7 @@
     </footer>
     <br><br><br><br><br>
 
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script src="js/script.js"></script>
 <script>
     var accessToken = localStorage.getItem("accessToken")
@@ -71,24 +81,13 @@
     var userStatusBox = document.querySelector(".user-status")
     var user = JSON.parse(sessionStorage.getItem("user"))
     var logoutButton = document.getElementById("logoutButton")
+    var askToRegister = document.querySelector(".ask-to-register")
+    var userPhoto = document.querySelector(".user-photo")
     
-    if (accessToken == null) {location.replace("../login.html")}
-    
-    if (user == null) {
-        fetch(baseUrl+"/user/get_me/", {
-            method: "GET",
-            headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}
-        })
-        .then(res => res.json())
-        .then(user => {
-            if (user.code == "user_not_found") {location.replace("../login.html")}
-            sessionStorage.setItem("user", JSON.stringify(user))
-            usernameBox.textContent = user.username
-            userStatusBox.textContent = user.role
-        })
-    } else {
-        usernameBox.textContent = user.username
-        userStatusBox.textContent = user.role
+    if (accessToken == null) {
+        document.querySelector(".profile-page-datas").style.display = "none"
+        askToRegister.style.display = "flex"
+        askToRegister.onclick = () => {location.assign("../login.html")}
     }
     
     logoutButton.addEventListener("click", () => {
@@ -100,6 +99,29 @@
         location.replace("../login.html")
     })
     
+    if (accessToken) {
+        fetch(baseUrl+"/user/get_me/", {
+            method: "GET",
+            headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.detail) {customErrorAlert(data.detail)}
+            usernameBox.textContent = data.username
+            userStatusBox.textContent = data.role
+        })
+        .catch(err => {customErrorAlert(err)})
+    }
+    
+    fetch(baseUrl+"/stores/store?my=store", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}
+    })
+    .then(res => res.json())
+    .then(data => {
+        userPhoto.src = baseUrl+data.logo
+    })
+    .catch(err => customErrorAlert(err))
 </script>
 </body>
 </html>

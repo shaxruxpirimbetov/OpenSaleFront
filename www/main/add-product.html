@@ -25,7 +25,7 @@
             <div class="add-product-submit" id="submitButton">Add Product</div>
         </div>
 
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script src="js/script.js"></script>
 <script>
     var images = document.querySelector(".some")
@@ -35,7 +35,7 @@
     var submitButton = document.getElementById("submitButton")
     var accessToken = localStorage.getItem("accessToken")
     
-    if (accessToken == null) {location.replace("../login.html")}
+    if (accessToken == null) {history.back()}
     
     images.addEventListener("change", () => {
         if (images.files.length > 4) {
@@ -73,6 +73,7 @@
         })
         .then(res => res.json())
         .then(data => {
+            console.log(data)
             formData.append("store_id", data[0].id)
             fetch(baseUrl+"/products/", {
                 method: "POST",
@@ -81,10 +82,12 @@
             })
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 if (data.status == false) {customErrorAlert(data.message)}
                 history.back()
             })
-        })
+            .catch(err => customErrorAlert(err))
+        }).catch(err => customErrorAlert(err))
     })
     
     

@@ -20,14 +20,14 @@
         <div class="add-product-submit" id="submitButton">Check</div>
     </div>
     
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script src="js/script.js"></script>
 <script>
     var accessToken = localStorage.getItem("accessToken")
     var emailInp = document.getElementById("emailInp")
     var submitButton = document.getElementById("submitButton")
     
-    if (accessToken == null) {location.replace("../login.html")}
+    if (accessToken == null) {history.back()}
     
     submitButton.addEventListener("click", () => {
         if (!emailInp.value.endsWith("@gmail.com")) {customErrorAlert("Invalid Error"); return;}
@@ -40,10 +40,12 @@
         .then(res => res.json())
         .then(data => {
             if (data.code == "user_not_found") {location.replace("../login.html")}
+            else if (data.detail) {customErrorAlert(data.detail)}
             if (data.status) {
                 location.replace("become-a-seller.html")
             }
         })
+        .catch(err => customErrorAlert(err))
         // location.replace("become-a-seller.html")
     })
     

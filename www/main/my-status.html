@@ -57,7 +57,7 @@
         </div>
     </main>
 
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script src="js/script.js"></script>
 <script>
     var myUsername = document.getElementById("myUsername")
@@ -67,17 +67,15 @@
     var sellerContainer = document.getElementById("sellerContainer")
     var buyerContainer = document.getElementById("buyerContainer")
     
-    if (accessToken == null) {location.replace("../login.html")}
-    
-    if (user == null) {
+    if (accessToken == null) {history.back()}
+    else {
         fetch(baseUrl+"/user/get_me/", {
             method: "GET",
             headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}
         })
         .then(res => res.json())
         .then(data => {
-            if (data.code == "user_not_found") {location.replace("../login.html")}
-            sessionStorage.setItem("user", JSON.stringify(data))
+            console.log(data)
             myUsername.textContent = data.username
             myStatus.textContent = data.role
             if (data.role == "Seller") {
@@ -88,16 +86,6 @@
                 buyerContainer.style.display = "block"
             }
         })
-    } else {
-        myUsername.textContent = user.username;
-        myStatus.textContent = user.role;
-        if (user.role == "Seller") {
-            sellerContainer.style.display = "block"
-            buyerContainer.style.display = "none"
-        } else {
-            sellerContainer.style.display = "none"
-            buyerContainer.style.display = "block"
-        }
     }
     
 </script>

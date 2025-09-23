@@ -20,7 +20,7 @@
         <div class="register-sbmt" id="submitButton">Обновить</div>
     </form>
 
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script src="js/script.js"></script>
 <script>
     var accessToken = localStorage.getItem("accessToken")
@@ -55,9 +55,9 @@
                 .then(data => {
                     sessionStorage.setItem("user", JSON.stringify(data))
                     history.back()
-                })
+                }).catch(err => customErrorAlert(err))
             }
-        })
+        }).catch(err => customErrorAlert(err))
     })
 </script>
 </body>

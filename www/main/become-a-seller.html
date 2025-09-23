@@ -34,7 +34,7 @@
         <div class="add-product-submit" id="submitButton">Become</div>
     </div>
 
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script src="js/script.js"></script>
 <script>
     
@@ -45,7 +45,7 @@
     var codeInp = document.getElementById("codeInp")
     var submitButton = document.getElementById("submitButton")
     
-    if (accessToken == null) {location.replace("../login.html")}
+    if (accessToken == null) {history.back()}
     
     submitButton.addEventListener("click", (e) => {
         if (logoInp.value.length < 1) {customErrorAlert("Set the logo!"); return;}
@@ -66,8 +66,12 @@
         })
         .then(res => res.json())
         .then(data => {
+            console.log(data)
+            if (data.detail) {customErrorAlert(data.detail)}
             if (data.status != false) {history.back()}
+            else {customErrorAlert(data.message)}
         })
+        .catch(err => customErrorAlert(err))
     })
 </script>
 </body>

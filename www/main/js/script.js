@@ -48,3 +48,57 @@ var addCenteredText = (message) => {
     textBox.appendChild(textMessage)
     document.body.appendChild(textBox)
 }
+
+const addProductToList = (data, data_list) => {
+    data.forEach((product) => {
+        var productBox = document.createElement("div")
+        var productImage = document.createElement("img")
+        var productData = document.createElement("div")
+        var productTitle = document.createElement("div")
+        var productPrice = document.createElement("div")
+        
+        productBox.className = "product"
+        productImage.className = "product-image"
+        productData.className = "product-data"
+        productTitle.className = "product-title"
+        productPrice.className = "product-price"
+                    
+        productImage.src = baseUrl+product.images[0].image
+        productTitle.textContent = product.title
+        productPrice.textContent = product.price
+        productBox.onclick = () => {openProductView(product.id)}
+                    
+        productData.appendChild(productTitle)
+        productData.appendChild(productPrice)
+        productBox.appendChild(productImage)
+        productBox.appendChild(productData)
+                    
+        data_list.appendChild(productBox)
+    })
+}
+
+const addMyProductToList = (data, data_list) => {
+    data.forEach((product) => {
+        var productBox = document.createElement("div")
+        var productImage = document.createElement("img")
+        var productTitle = document.createElement("div")
+        var productIcon = document.createElement("i")
+            
+        productBox.className = "my-product"
+        productImage.className = "my-product-image"
+        productTitle.className = "my-product-title"
+        productIcon.className = "fas fa-chevron-right"
+            
+        productImage.src = baseUrl+product.images[0].image
+        productTitle.textContent = product.title
+        productBox.onclick = () => {
+            sessionStorage.setItem("update_product_id", product.id)
+            location.assign("update-product.html")
+        }
+            
+        productBox.appendChild(productImage)
+        productBox.appendChild(productTitle)
+        productBox.appendChild(productIcon)
+        data_list.appendChild(productBox)
+    })
+}

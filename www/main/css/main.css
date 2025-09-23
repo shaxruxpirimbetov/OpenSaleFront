@@ -372,6 +372,28 @@ main {
     font-weight: 650;
 }
 
+.ask-to-register {
+    background: var(--second-color);
+    padding: .5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5em;
+}
+
+.ask-to-register i { font-size: 2.5em; color: var(--first-color); }
+.ask-to-register .register-button {
+    background: var(--first-color);
+    color: white;
+    padding: .5em 1em;
+    display: flex;
+    align-items: center;
+    border-radius: 2em;
+    gap: .5em;
+}
+.ask-to-register .register-button i {font-size: 1em; color: var(--second-color)}
+
 footer {
     background: var(--first-color);
     position: fixed;

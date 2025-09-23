@@ -9,72 +9,57 @@
 </head>
 <body>
     <header>
-        <h2>Мой товар</h2>
+        <h2>OpenSale</h2>
     </header>
     <main>
-        
-        <div class="update-product-images">
-            <!--
-            <img src="image.jpg" alt="">
-            <img src="image.jpg" alt="">
-            <img src="image.jpg" alt="">
-            <img src="image.jpg" alt="">
-            <img src="image.jpg" alt="">
-            -->
-        </div>
-        
+        <div class="update-product-images" id="images"></div>
         <div class="update-product-box">
             <div class="key">Title</div>
-            <div class="value" id="titleInp" contenteditable>Bmw product</div>
+            <div class="value" id="titleInp" contenteditable=""></div>
         </div>
         <div class="update-product-box">
             <div class="key">Description</div>
-            <pre class="value" id="descriptionInp" contenteditable>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque odio maiores reiciendis, quibusdam nostrum laborum quas, saepe. Veritatis, sunt, ad, cupiditate enim officia qui id explicabo, in ratione harum quo!</pre>
+            <div class="value" id="descriptionInp" contenteditable></div>
         </div>
         <div class="update-product-box">
             <div class="key">Price</div>
-            <input class="value" id="priceInp" type="number" value=39>
+            <input type="number" class="value" id="priceInp">
         </div>
         <div class="update-product-button">Update</div>
-        
     </main>
-
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script src="js/script.js"></script>
 <script>
-    var updateButton = document.querySelector(".update-product-button")
-    var imagesList = document.querySelector(".update-product-images")
-    var values = document.querySelectorAll(".value")
-    var titleInp = document.getElementById("titleInp")
-    var descriptionInp = document.getElementById("descriptionInp")
-    var priceInp = document.getElementById("priceInp")
     var accessToken = localStorage.getItem("accessToken")
-    var products = JSON.parse(sessionStorage.getItem("products"))
+    var title = document.getElementById("titleInp")
+    var description = document.getElementById("descriptionInp")
+    var price = document.getElementById("priceInp")
+    var images = document.getElementById("images")
     var updateProductId = sessionStorage.getItem("update_product_id")
+    var values = document.querySelectorAll(".value")
+    var updateButton = document.querySelector(".update-product-button")
     var edited = false
-    var product = null
     
-    if (accessToken == null) {location.replace("../login.html")}
-    if (updateProductId == null) {location.replace("my-products.html")}
-    if (products == null) {
-        fetch(baseUrl+"/products", {method: "GET", headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}})
-        .then(res => res.json())
-        .then(data => {sessionStorage.setItem("products", JSON.stringify(data))})
-    }
+    if (updateProductId == null) {history.back()}
+    if (accessToken == null) {history.back()}
     
-    var products = JSON.parse(sessionStorage.getItem("products"))
-    for (let i of products) {
-        if (i.id == updateProductId) {product = i}
-    }
-    
-    product.images.forEach((image) => {
-        var imageBox = document.createElement("img")
-        imageBox.src = baseUrl+image.image
-        imagesList.appendChild(imageBox)
+    fetch(baseUrl+"/products?product_id="+updateProductId, {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`}
     })
-    titleInp.textContent = product.title
-    descriptionInp.textContent = product.description
-    priceInp.value = product.price
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        title.textContent = data.title
+        description.textContent = data.description
+        price.value = data.price
+        data.images.forEach((image) => {
+            var imageBox = document.createElement("img")
+            imageBox.src = baseUrl+image.image
+            images.appendChild(imageBox)
+        })
+    })
+    .catch(err => customErrorAlert(err))
     
     values.forEach((value) => {
         value.addEventListener("input", () => {
@@ -82,36 +67,21 @@
             updateButton.style.display = "block"
         })
     })
-    /*
-    imagesList.forEach((image) => {
-        image.addEventListener("click", () => {
-            var deletePhoto = confirm("Delete photo?")
-            if (deletePhoto) {console.log("Delete with path or id")}
-        })
-    })
-    */
+    
     updateButton.addEventListener("click", () => {
-        var sure = confirm("Are you sure?")
+        var sure = confirm("Sure?")
         if (sure) {
             fetch(baseUrl+"/products/", {
                 method: "PUT",
                 headers: {"Content-Type": "application/json", "authorization": `Bearer ${accessToken}`},
-                body: JSON.stringify({
-                    product_id: updateProductId,
-                    title: titleInp.textContent,
-                    description: descriptionInp.textContent,
-                    price: priceInp.value
-                })
+                body: JSON.stringify({product_id: updateProductId, title: title.textContent, description: description.textContent, price: price.value})
             })
             .then(res => res.json())
             .then(data => {
-                if (data.code == "user_not_found") {location.replace("../login.html")}
-                console.log(data)
-                if (data.status == false) {
-                    customErrorAlert("Some Error")
-                }
+                if (data.detail) {customErrorAlert(data.detail)}
                 else {history.back()}
             })
+            .catch(err => customErrorAlert(err))
         }
     })
     

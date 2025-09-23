@@ -24,6 +24,16 @@
             </div>
             -->
         </div>
+        
+        <div class="ask-to-register" style="display: none;">
+            <i class="fas fa-smile"></i>
+            <div class="message">Register now to add products</div>
+            <div class="register-button">
+                <i class="fas fa-right-from-bracket"></i>
+                <h3>Register</h3>
+            </div>
+        </div>
+        
     </main>
     
     <footer>
@@ -42,15 +52,18 @@
     </footer>
     <br><br><br><br><br>
    
-<script src="config.js"></script> 
+<script src="js/config.js"></script> 
 <script src="js/script.js"></script>
 <script>
     var accessToken = localStorage.getItem("accessToken") || null
     var productsList = document.querySelector(".products-list")
     var sessionSavedProducts = JSON.parse(sessionStorage.getItem("saved_products")) || null
+    var askToRegister = document.querySelector(".ask-to-register")
     
-    if (!navigator.onLine) {customAlert("Connection Error")}
-    if (accessToken == null) {location.replace("../login.html")}
+    if (accessToken == null) {
+        askToRegister.style.display = "flex"
+        askToRegister.onclick = () => {location.assign("../register.html")}
+    }
     
     if (sessionSavedProducts == null) {
         fetch(baseUrl+"/user/saved_products/", {
@@ -59,60 +72,12 @@
         })
         .then(res => res.json())
         .then(data => {
-            sessionStorage.setItem("saved_products", JSON.stringify(data))
-            data.forEach((product) => {
-                var productBox = document.createElement("div")
-                var productImage = document.createElement("img")
-                var productData = document.createElement("div")
-                var productTitle = document.createElement("div")
-                var productPrice = document.createElement("div")
-                
-                productBox.className = "product"
-                productImage.className = "product-image"
-                productData.className = "product-data"
-                productTitle.className = "product-title"
-                productPrice.className = "product-price"
-                
-                productImage.src = baseUrl + product.images[0].image
-                productTitle.textContent = product.title
-                productPrice.textContent = product.price
-                productBox.onclick = () => { openProductView(product.id) }
-                
-                productData.appendChild(productTitle)
-                productData.appendChild(productPrice)
-                productBox.appendChild(productImage)
-                productBox.appendChild(productData)
-                
-                productsList.appendChild(productBox)
-            })
+            if (data.detail) {return}
+            if (data.length == 0) {addCenteredText("У вас нет сохранений")}
+            // sessionStorage.setItem("saved_products", JSON.stringify(data))
+            addProductToList(data, productsList)
         })
-    } else {
-        sessionSavedProducts.forEach((product) => {
-            var productBox = document.createElement("div")
-            var productImage = document.createElement("img")
-            var productData = document.createElement("div")
-            var productTitle = document.createElement("div")
-            var productPrice = document.createElement("div")
-            
-            productBox.className = "product"
-            productImage.className = "product-image"
-            productData.className = "product-data"
-            productTitle.className = "product-title"
-            productPrice.className = "product-price"
-            
-            productImage.src = baseUrl + product.images[0].image
-            productTitle.textContent = product.title
-            productPrice.textContent = product.price
-            productBox.onclick = () => { openProductView(product.id) }
-            
-            productData.appendChild(productTitle)
-            productData.appendChild(productPrice)
-            productBox.appendChild(productImage)
-            productBox.appendChild(productData)
-            
-            productsList.appendChild(productBox)
-        })
-    }
+    } else {addProductToList(sessionSavedProducts, productsList)}
     
     var openProductView = (product_id) => {
         sessionStorage.setItem("open_product_id", product_id)

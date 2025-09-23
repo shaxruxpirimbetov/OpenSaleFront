@@ -39,88 +39,41 @@
     </footer>
     <br><br><br><br><br>
 
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 <script src="js/script.js"></script>
 <script>
-
-    if (!navigator.onLine) {customAlert("Connection Error")}
     var accessToken = localStorage.getItem("accessToken") || null
     var sessionProducts = JSON.parse(sessionStorage.getItem("products")) || null
     var productsList = document.querySelector(".products-list")
     
-    if (accessToken == null) {location.replace("../login.html")}
+    // if (!navigator.onLine) {customAlert("Connection Error")}
     
     if (sessionProducts == null || sessionProducts.length == 0 || sessionProducts.detail) {
         fetch(baseUrl+"/products/", {
             method: "GET",
             headers: {
-                "Content-Type": "application/json",
-                "authorization": `Bearer ${accessToken}`
+                "Content-Type": "application/json"
             }
         })
         .then(res => res.json())
         .then(data => {
-            if (data.code == "user_not_found") {location.replace("../login.html")}
             console.log(data)
+            if (data.code == "user_not_found") {location.replace("../login.html")}
+            else if (data.detail) {customErrorAlert(data.detail)}
             if (data.length == 0) {addCenteredText("Products not found")}
+            
             sessionStorage.setItem("products", JSON.stringify(data))
-            data.forEach((product) => {
-                var productBox = document.createElement("div")
-                var productImage = document.createElement("img")
-                var productData = document.createElement("div")
-                var productTitle = document.createElement("div")
-                var productPrice = document.createElement("div")
-                
-                productBox.className = "product"
-                productImage.className = "product-image"
-                productData.className = "product-data"
-                productTitle.className = "product-title"
-                productPrice.className = "product-price"
-                
-                productImage.src = baseUrl+product.images[0].image
-                productTitle.textContent = product.title
-                productPrice.textContent = product.price
-                productBox.onclick = () => {openProductView(product.id)}
-                
-                productData.appendChild(productTitle)
-                productData.appendChild(productPrice)
-                productBox.appendChild(productImage)
-                productBox.appendChild(productData)
-                
-                productsList.appendChild(productBox)
-            })
+            addProductToList(data, productsList)
         })
+        .catch(err => customErrorAlert(err))
     } else {
-        sessionProducts.forEach((product) => {
-            var productBox = document.createElement("div")
-            var productImage = document.createElement("img")
-            var productData = document.createElement("div")
-            var productTitle = document.createElement("div")
-            var productPrice = document.createElement("div")
-                
-            productBox.className = "product"
-            productImage.className = "product-image"
-            productData.className = "product-data"
-            productTitle.className = "product-title"
-            productPrice.className = "product-price"
-            
-            productImage.src = baseUrl+product.images[0].image
-            productTitle.textContent = product.title
-            productPrice.textContent = product.price
-            productBox.onclick = () => {openProductView(product.id)}
-            
-            productData.appendChild(productTitle)
-            productData.appendChild(productPrice)
-            productBox.appendChild(productImage)
-            productBox.appendChild(productData)
-                
-            productsList.appendChild(productBox)
-        })
+        var products = sessionProducts
+        addProductToList(sessionProducts, productsList)
     }
     
     var openProductView = (product_id) => {
         sessionStorage.setItem("open_product_id", product_id)
-        location.replace("product-view.html")
+        location.assign("product-view.html")
     }
     
 </script>
