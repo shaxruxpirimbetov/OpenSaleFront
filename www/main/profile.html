@@ -13,6 +13,13 @@
     </header>
     <main>
         <div class="profile-page-datas">
+        
+        <div class="store-container">
+            <img src="" alt="" id="storeLogo">
+            <div class="store-title" id="storeTitle"></div>
+            <div class="username" id="userName"></div>
+        </div>
+        <!--
         <div class="profile-user-data">
             <img src="img/profile.jpg" alt="" class="user-photo">
             <div>
@@ -20,6 +27,7 @@
                 <div class="user-status">seller</div>
             </div>
         </div>
+         -->
         <br>
         <div class="mark-div">
             <div class="mark"></div>
@@ -77,8 +85,9 @@
 <script src="js/script.js"></script>
 <script>
     var accessToken = localStorage.getItem("accessToken")
-    var usernameBox = document.querySelector(".user-username")
-    var userStatusBox = document.querySelector(".user-status")
+    var usernameBox = document.getElementById("userName")
+    var storeLogo = document.getElementById("storeLogo")
+    var storeTitle = document.getElementById("storeTitle")
     var user = JSON.parse(sessionStorage.getItem("user"))
     var logoutButton = document.getElementById("logoutButton")
     var askToRegister = document.querySelector(".ask-to-register")
@@ -108,7 +117,6 @@
         .then(data => {
             if (data.detail) {customErrorAlert(data.detail)}
             usernameBox.textContent = data.username
-            userStatusBox.textContent = data.role
         })
         .catch(err => {customErrorAlert(err)})
     }
@@ -119,7 +127,9 @@
     })
     .then(res => res.json())
     .then(data => {
-        userPhoto.src = baseUrl+data.logo
+        if (data.detail) {customErrorAlert(data.detail)}
+        storeLogo.src = baseUrl+data.logo
+        storeTitle.textContent = data.title
     })
     .catch(err => customErrorAlert(err))
 </script>
