@@ -28,8 +28,18 @@
     var submitButton = document.getElementById("submitButton")
     var user = JSON.parse(sessionStorage.getItem("user"))
     
-    if (user != null) {usernameInp.value = user.username}
+    /*
+    fetch(baseUrl+"/user/get_me/", {
+        method: "GET",
+        headers: {"Content-Type": "application/json", "authorization": `Bearer ${access token}`}
+    })
+    .then(res => res.json())
+    .then(data => {
+        usernameInp.value = data.username
+    }).catch(err => customErrorAlert(err))
     
+    // if (user != null) {usernameInp.value = user.username}
+    */
     submitButton.addEventListener("click", () => {
         if (usernameInp.value.length < 6) {customErrorAlert("Usernam so verify"); return;}
         

@@ -15,7 +15,7 @@
         <div class="profile-page-datas">
         
         <div class="store-container">
-            <img src="" alt="" id="storeLogo">
+            <img src="img/user2.jpg" alt="" id="storeLogo">
             <div class="store-title" id="storeTitle"></div>
             <div class="username" id="userName"></div>
         </div>
@@ -127,7 +127,9 @@
     })
     .then(res => res.json())
     .then(data => {
+        console.log(data)
         if (data.detail) {customErrorAlert(data.detail)}
+        if (data.status == false) {return;}
         storeLogo.src = baseUrl+data.logo
         storeTitle.textContent = data.title
     })
