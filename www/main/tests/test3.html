@@ -1,0 +1,166 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            outline: 0;
+            user-select: none;
+            box-sizing: border-box;
+        }
+        header {
+            background: #42445A;
+            color: white;
+            padding: 1em;
+            width: 95%;
+            margin: 2.5%;
+            border-radius: 1em;
+            box-shadow: 0 0 .5em grey;
+        }
+        header .logo {
+            display: flex;
+            align-items: center;
+            gap: .25em;
+        }
+        
+        header .logo .title {
+            font-size: 1.25em;
+            font-weight: 500;
+        }
+        
+        footer {
+            background: #42445A;
+            bottom: 0;
+            position: fixed;
+            display: flex;
+            justify-content: space-around;
+            padding: .5em;
+            width: 95%;
+            margin: 2.5%;
+            border-radius: 1em;
+            box-shadow: 0 0 .5em grey;
+            color: white;
+        }
+        .page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .25em;
+        }
+        .page i {font-size: 1.5em}
+        .page .title {
+            font-size: 1em;
+            font-weight: 650;
+        }
+        .products-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 1em;
+        }
+        
+        .products-list img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: .5em;
+        }
+        
+        .products-list .product {
+            box-shadow: 0 0 .5em grey;
+            overflow: hidden;
+            border-radius: .5em;
+            background: #42445A;
+            color: white;
+        }
+        .products-list .product .body {
+            padding: .25em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-user"></i>
+            <div class="title">Human.org</div>
+        </div>
+    </header>
+    <div class="products-list">
+        <div class="product">
+            <img src="../image.jpg" alt="">
+            <div class="body">
+                <div class="title">Title</div>
+                <div class="price">64.000</div>
+            </div>
+        </div>
+        <div class="product">
+            <img src="../image.jpg" alt="">
+            <div class="body">
+                <div class="title">Title</div>
+                <div class="price">64.000</div>
+            </div>
+        </div>
+        <div class="product">
+            <img src="../image.jpg" alt="">
+            <div class="body">
+                <div class="title">Title</div>
+                <div class="price">64.000</div>
+            </div>
+        </div>
+        <div class="product">
+            <img src="../image.jpg" alt="">
+            <div class="body">
+                <div class="title">Title</div>
+                <div class="price">64.000</div>
+            </div>
+        </div>
+        <div class="product">
+            <img src="../image.jpg" alt="">
+            <div class="body">
+                <div class="title">Title</div>
+                <div class="price">64.000</div>
+            </div>
+        </div>
+        <div class="product">
+            <img src="../image.jpg" alt="">
+            <div class="body">
+                <div class="title">Title</div>
+                <div class="price">64.000</div>
+            </div>
+        </div>
+        <div class="product">
+            <img src="../image.jpg" alt="">
+            <div class="body">
+                <div class="title">Title</div>
+                <div class="price">64.000</div>
+            </div>
+        </div>
+        <div class="product">
+            <img src="../image.jpg" alt="">
+            <div class="body">
+                <div class="title">Title</div>
+                <div class="price">64.000</div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="page">
+            <i class="fas fa-home"></i>
+            <div class="title">Home</div>
+        </div>
+        <div class="page">
+            <i class="fas fa-search"></i>
+            <div class="title">Search</div>
+        </div>
+        <div class="page">
+            <i class="fas fa-user"></i>
+            <div class="title">Profile</div>
+        </div>
+    </footer>
+</body>
+</html>
