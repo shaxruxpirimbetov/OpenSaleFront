@@ -264,6 +264,13 @@ main {
     display: none;
 }
 
+.delete-product-button {
+    background: #F34D4D;
+    color: white;
+    padding: 1em;
+    border-radius: 1em;
+}
+
 .centered-text-box {
     position: absolute;
     top: 20%;
